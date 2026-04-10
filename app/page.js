@@ -1,14 +1,5 @@
-import Image from "next/image";
 import DigitalTwinChat from "./components/digital-twin-chat";
-
-const navItems = [
-  { label: "About", href: "#about" },
-  { label: "AI Twin", href: "#digital-twin" },
-  { label: "Journey", href: "#journey" },
-  { label: "Expertise", href: "#expertise" },
-  { label: "Portfolio", href: "#portfolio" },
-  { label: "Contact", href: "#contact" },
-];
+import SiteHeader from "./components/site-header";
 
 const highlights = [
   { value: "10+", label: "Years in Data, Strategy & Analytics" },
@@ -173,34 +164,7 @@ export default function HomePage() {
     <main className="site-shell">
       <div className="ambient ambient-one" />
       <div className="ambient ambient-two" />
-
-      <header className="topbar">
-        <a href="#" className="brand">
-          <span className="brand-photo-wrap">
-            <Image
-              src="/ayush_photo.jpeg"
-              alt="Ayush Verma"
-              width={52}
-              height={52}
-              className="brand-photo"
-              priority
-            />
-          </span>
-          <span className="brand-text-block">
-            <span className="brand-name">AYUSH VERMA</span>
-            <span className="brand-subtitle">Data, Strategy & AI</span>
-          </span>
-        </a>
-        <nav>
-          <ul className="nav-list">
-            {navItems.map((item) => (
-              <li key={item.href}>
-                <a href={item.href}>{item.label}</a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </header>
+      <SiteHeader />
 
       <section className="hero section-reveal">
         <p className="kicker">DATA GOVERNANCE, STRATEGY & AI</p>

@@ -24,13 +24,18 @@ Primary goals completed during this project:
 7. Add additional `noon` experience details requested by user.
 8. Prepare GitHub push workflow and deployment runbook for EC2 + GoDaddy + HTTPS.
 9. Produce beginner tutorial documentation (`tutorial.md`).
+10. Add an `AI Projects` top navigation tab with hover/focus dropdown behavior and dedicated project pages.
 
 ## 3) Current File Map (Critical)
 
 ```text
 app/
+  ai-projects/page.js
+  ai-projects/[slug]/page.js
   api/digital-twin/route.js
   components/digital-twin-chat.jsx
+  components/site-header.jsx
+  lib/aiProjects.js
   lib/digitalTwinContext.js
   globals.css
   layout.js
@@ -91,9 +96,11 @@ Information extracted and used:
 
 ### 5.1 Frontend
 
-- Single-page portfolio rendered from `app/page.js`.
+- Main portfolio page rendered from `app/page.js`.
+- Dedicated AI project pages:
+  - Project directory page: `app/ai-projects/page.js`
+  - Dynamic project detail page: `app/ai-projects/[slug]/page.js`
 - Data-driven sections defined as in-file arrays:
-  - `navItems`
   - `highlights`
   - `journey`
   - `expertise`
@@ -101,6 +108,8 @@ Information extracted and used:
   - `education`
   - `honors`
   - `portfolioProjects`
+- AI projects directory data is centralized in `app/lib/aiProjects.js`.
+- Shared top navigation/header is componentized in `app/components/site-header.jsx`.
 - Includes `DigitalTwinChat` component and branding photo via Next.js `Image`.
 
 ### 5.2 Styling
@@ -109,10 +118,11 @@ Information extracted and used:
 - Uses CSS custom properties for design tokens (`--bg`, `--accent`, etc).
 - Includes:
   - Sticky nav/header
+  - Hover + keyboard-focus AI Projects dropdown (`:hover` + `:focus-within`)
   - Animated ambient background
   - Responsive cards/timelines
   - Modern twin-widget styles
-  - Mobile breakpoint optimization
+  - Mobile breakpoint optimization (dropdown converts to visible stacked menu)
 
 ### 5.3 Backend API
 
@@ -196,6 +206,12 @@ State model:
   - Standup leadership and trend issue tracking
   - Product, marketing, onsite, and pricing strategy support
 
+### 7.5 AI Projects information architecture
+
+- Added a new top-level `AI Projects` nav tab.
+- Added hover/focus dropdown listing current AI project entries.
+- Added dedicated page pattern for each project with route-driven content and live demo support.
+
 ## 8) Build/Test Validation History
 
 Repeated checks performed across iterations:
@@ -205,6 +221,8 @@ Repeated checks performed across iterations:
 - Verified app routes included:
   - `/`
   - `/_not-found`
+  - `/ai-projects`
+  - `/ai-projects/[slug]` with static param `career-ai-chatbot`
   - `/api/digital-twin`
 
 2. Digital Twin endpoint smoke tests (local)
@@ -219,6 +237,13 @@ Repeated checks performed across iterations:
 
 4. Unicode lint check
 - Used regex scan to ensure edited files were ASCII-safe unless needed.
+
+5. Deep route/API functional check after AI Projects rollout
+- Started production server and validated:
+  - Home renders `AI Projects` nav with dropdown item `Career AI Chatbot`.
+  - `/ai-projects` renders project list page.
+  - `/ai-projects/career-ai-chatbot` renders dedicated project detail page and live demo anchor.
+  - `POST /api/digital-twin` returns valid JSON `reply`.
 
 ## 9) Tooling and Environment Constraints Encountered
 
@@ -318,8 +343,10 @@ If a future chat needs to restore project context quickly, do this:
 1. Read this file (`agents.md`).
 2. Read `README.md` and `tutorial.md`.
 3. Verify `app/page.js` and `app/api/digital-twin/route.js` are aligned.
-4. Run `npm run build`.
-5. If deployment issue:
+4. Verify AI project routing files (`app/ai-projects/page.js`, `app/ai-projects/[slug]/page.js`, `app/lib/aiProjects.js`).
+5. Run `npm run build`.
+6. Validate `/ai-projects` and `/ai-projects/career-ai-chatbot`.
+7. If deployment issue:
    - Check `sudo systemctl status personal-website`
    - Check `sudo nginx -t`
    - Check cert status `sudo certbot certificates`
@@ -332,6 +359,7 @@ If a future chat needs to restore project context quickly, do this:
 - Noon-specific additions requested by user.
 - Portfolio entries derived from `extra_experience.pdf`.
 - Branded header with photo and stronger name typography.
+- `AI Projects` navigation and dedicated project pages pattern (for scaling future AI builds).
 
 ## 17) Chronological Delivery Log
 
@@ -362,6 +390,11 @@ This section is a practical sequence of what was delivered and why, from first b
 20. Diagnosed SSH confusion (`Permission denied (publickey)`) as key-path/session mismatch when attempting SSH from inside browser EC2 session instead of local machine.
 21. Confirmed production build success logs (`next build`) including route output and API route registration.
 22. Advised security hardening on secret handling and service restarts for rotated keys.
+23. Implemented shared `SiteHeader` with `AI Projects` nav dropdown and project-item hover/focus behavior.
+24. Added reusable AI projects data registry (`app/lib/aiProjects.js`) to support scaling with additional project entries.
+25. Created `/ai-projects` project index page and `/ai-projects/career-ai-chatbot` dedicated project detail route.
+26. Embedded live Career AI Chatbot experience in the dedicated project detail page.
+27. Ran deep route/API validation in production mode for home nav labels, project listing page, project detail page, and chatbot endpoint response.
 
 ## 18) Command Reference (Validated Paths)
 
@@ -432,6 +465,18 @@ sudo certbot renew --dry-run
 curl -I http://ayush-verma.com
 curl -I https://ayush-verma.com
 curl -I https://www.ayush-verma.com
+```
+
+### 18.8 AI Projects route verification (local production mode)
+
+```bash
+PATH="$(pwd)/.local/node/bin:$PATH" npm run build
+PATH="$(pwd)/.local/node/bin:$PATH" ./node_modules/.bin/next start -H 127.0.0.1 -p 3301
+curl -sS http://127.0.0.1:3301/ | rg "AI Projects|Career AI Chatbot"
+curl -sS http://127.0.0.1:3301/ai-projects | rg "Current live project portfolio"
+curl -sS http://127.0.0.1:3301/ai-projects/career-ai-chatbot | rg "Launch Live Demo|Career AI Chatbot"
+curl -sS -X POST http://127.0.0.1:3301/api/digital-twin -H "Content-Type: application/json" \
+  -d '{"messages":[{"role":"user","content":"What did Ayush lead at noon?"}]}'
 ```
 
 ## 19) Troubleshooting Playbook
