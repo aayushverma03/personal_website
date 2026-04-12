@@ -4,6 +4,7 @@ const prelegalBackendUrl =
 
 const nextConfig = {
   reactStrictMode: true,
+  output: "standalone",
   async rewrites() {
     return [
       {

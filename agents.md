@@ -7,7 +7,7 @@ This file is a durable project memory for the `SITE` project so that future chat
 - Project name: `ayush-verma-website`
 - Repository intent: personal portfolio website + AI project showcase + AI career assistant (Digital Twin) + in-domain Prelegal document curation portal
 - Framework: Next.js App Router
-- Runtime: Node.js
+- Runtime: Next.js (Node.js) + FastAPI (Python) with optional single Docker container
 - Current local root: `/Users/ayush/Documents/Projects/SITE`
 - Public domain target: `ayush-verma.com` and `www.ayush-verma.com`
 
@@ -31,6 +31,11 @@ Primary goals completed during this project:
 14. Embed Prelegal portal preview iframe in the AI project detail page.
 15. Implement real PDF export for Prelegal creator in the `SITE` app using `jspdf`.
 16. Add responsive/mobile optimization for the in-domain Prelegal UI while preserving original visual style.
+17. Add PRELEGAL runtime parity in `SITE`:
+    - copy backend source under `SITE/backend`
+    - add Docker multi-stage build
+    - add shared entrypoint to run FastAPI + Next.js in one container
+    - add docker helper scripts (`scripts/start.sh`, `scripts/stop.sh`)
 
 ## 3) Current File Map (Critical)
 
@@ -60,10 +65,24 @@ public/
   Profile.pdf
   ayush_photo.jpeg
 
+backend/
+  app/main.py
+  app/chat.py
+  app/auth.py
+  app/documents/*
+  pyproject.toml
+  uv.lock
+  data/.gitkeep
+
 scripts/
+  entrypoint.sh
+  start.sh
+  stop.sh
   run-dev.sh
 
 root:
+  .dockerignore
+  Dockerfile
   Profile.pdf
   extra_experience.pdf
   ayush_photo.jpeg
@@ -736,16 +755,21 @@ Likely cause:
 - Prelegal backend is not running or `PRELEGAL_BACKEND_URL` is incorrect for the current environment.
 
 Fix:
-1. Start backend:
+1. Preferred (single-container run):
    ```bash
-   cd /Users/ayush/Documents/Projects/PRELEGAL/backend
+   cd /Users/ayush/Documents/Projects/SITE
+   ./scripts/start.sh
+   ```
+2. Or start backend directly:
+   ```bash
+   cd /Users/ayush/Documents/Projects/SITE/backend
    ./.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
    ```
-2. Verify proxy path through SITE:
+3. Verify proxy path through SITE:
    ```bash
    curl -sS http://127.0.0.1:3000/api/prelegal/health
    ```
-3. If needed, set/update `PRELEGAL_BACKEND_URL` in SITE env and restart SITE server.
+4. If needed, set/update `PRELEGAL_BACKEND_URL` in SITE env and restart SITE server/container.
 
 ### 19.7 Prelegal login/signup page build error about `useSearchParams`
 

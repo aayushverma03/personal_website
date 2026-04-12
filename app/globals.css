@@ -364,6 +364,15 @@ body {
   box-shadow: 0 10px 24px rgba(255, 170, 84, 0.2);
 }
 
+.btn-repo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+.btn-repo svg {
+  flex-shrink: 0;
+}
+
 .highlights {
   margin-top: 1rem;
   display: grid;

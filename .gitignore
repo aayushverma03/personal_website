@@ -4,3 +4,8 @@ node_modules
 .local
 npm-debug.log*
 .DS_Store
+backend/.venv/
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/.pytest_cache/
+backend/data/*.db

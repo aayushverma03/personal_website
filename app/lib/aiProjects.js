@@ -4,6 +4,7 @@ export const AI_PROJECTS = [
     name: "Career AI Chatbot",
     status: "Live",
     route: "/ai-projects/career-ai-chatbot",
+    repoUrl: "https://github.com/aayushverma03/personal_website",
     summary:
       "An AI-powered Digital Twin experience that answers career-focused questions in Ayush Verma's voice using profile-grounded context.",
     problem:
@@ -34,6 +35,7 @@ export const AI_PROJECTS = [
     name: "LexDraft: Prelegal AI Document Curation",
     status: "Live",
     route: "/ai-projects/prelegal-document-curation",
+    repoUrl: "https://github.com/aayushverma03/prelegal",
     summary:
       "LexDraft is a chat-first pre-legal drafting workspace that guides users from intent to downloadable document outputs.",
     problem:
