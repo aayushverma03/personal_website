@@ -19,6 +19,7 @@ export default function PrelegalCreatorApp() {
   const [error, setError] = useState(null);
   const [renamingId, setRenamingId] = useState(null);
   const [renameTitle, setRenameTitle] = useState("");
+  const [mobileDraftsOpen, setMobileDraftsOpen] = useState(false);
 
   const scrollRef = useRef(null);
   const textareaRef = useRef(null);
@@ -237,6 +238,27 @@ export default function PrelegalCreatorApp() {
           </div>
         </div>
       </header>
+
+      <div className="pl-mobile-drafts-bar">
+        <div className="pl-mobile-drafts-scroll">
+          {drafts.map((d) => (
+            <button
+              key={d.id}
+              className={`pl-mobile-draft-chip ${d.id === state.draft_id ? "is-active" : ""}`}
+              onClick={() => selectDraft(d.id)}
+            >
+              {d.title}
+            </button>
+          ))}
+          <button
+            className="pl-mobile-draft-chip pl-mobile-draft-new"
+            onClick={createNewDraft}
+            disabled={busy}
+          >
+            + New
+          </button>
+        </div>
+      </div>
 
       <div className="pl-creator-grid">
         <DraftsSidebar
