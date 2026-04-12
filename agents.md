@@ -5,7 +5,7 @@ This file is a durable project memory for the `SITE` project so that future chat
 ## 1) Project Identity
 
 - Project name: `ayush-verma-website`
-- Repository intent: personal portfolio website + AI career assistant (Digital Twin)
+- Repository intent: personal portfolio website + AI project showcase + AI career assistant (Digital Twin) + in-domain Prelegal document curation portal
 - Framework: Next.js App Router
 - Runtime: Node.js
 - Current local root: `/Users/ayush/Documents/Projects/SITE`
@@ -25,6 +25,12 @@ Primary goals completed during this project:
 8. Prepare GitHub push workflow and deployment runbook for EC2 + GoDaddy + HTTPS.
 9. Produce beginner tutorial documentation (`tutorial.md`).
 10. Add an `AI Projects` top navigation tab with hover/focus dropdown behavior and dedicated project pages.
+11. Add `Prelegal AI Document Curation` as an AI project entry under the shared AI Projects navigation and directory.
+12. Build in-domain Prelegal routes under `SITE` (`/ai-projects/prelegal`, login, signup, creator) so the product can run under one domain.
+13. Add API rewrite proxy in `next.config.mjs` from `/api/prelegal/*` to the external Prelegal backend (`PRELEGAL_BACKEND_URL`).
+14. Embed Prelegal portal preview iframe in the AI project detail page.
+15. Implement real PDF export for Prelegal creator in the `SITE` app using `jspdf`.
+16. Add responsive/mobile optimization for the in-domain Prelegal UI while preserving original visual style.
 
 ## 3) Current File Map (Critical)
 
@@ -32,11 +38,20 @@ Primary goals completed during this project:
 app/
   ai-projects/page.js
   ai-projects/[slug]/page.js
+  ai-projects/prelegal/layout.jsx
+  ai-projects/prelegal/page.jsx
+  ai-projects/prelegal/login/page.jsx
+  ai-projects/prelegal/signup/page.jsx
+  ai-projects/prelegal/creator/page.jsx
   api/digital-twin/route.js
   components/digital-twin-chat.jsx
+  components/prelegal/auth-form.jsx
+  components/prelegal/creator-app.jsx
   components/site-header.jsx
   lib/aiProjects.js
   lib/digitalTwinContext.js
+  lib/prelegal-api.js
+  lib/prelegal-pdf.js
   globals.css
   layout.js
   page.js
@@ -100,6 +115,11 @@ Information extracted and used:
 - Dedicated AI project pages:
   - Project directory page: `app/ai-projects/page.js`
   - Dynamic project detail page: `app/ai-projects/[slug]/page.js`
+- In-domain Prelegal pages (ported into SITE):
+  - Landing: `app/ai-projects/prelegal/page.jsx`
+  - Auth: `app/ai-projects/prelegal/login/page.jsx`, `app/ai-projects/prelegal/signup/page.jsx`
+  - Creator workspace: `app/ai-projects/prelegal/creator/page.jsx`
+  - Route-local layout wrapper: `app/ai-projects/prelegal/layout.jsx`
 - Data-driven sections defined as in-file arrays:
   - `highlights`
   - `journey`
@@ -111,6 +131,12 @@ Information extracted and used:
 - AI projects directory data is centralized in `app/lib/aiProjects.js`.
 - Shared top navigation/header is componentized in `app/components/site-header.jsx`.
 - Includes `DigitalTwinChat` component and branding photo via Next.js `Image`.
+- Prelegal UI logic/components in SITE:
+  - `app/components/prelegal/auth-form.jsx`
+  - `app/components/prelegal/creator-app.jsx`
+- Prelegal client/runtime libraries in SITE:
+  - `app/lib/prelegal-api.js`
+  - `app/lib/prelegal-pdf.js`
 
 ### 5.2 Styling
 
@@ -123,6 +149,9 @@ Information extracted and used:
   - Responsive cards/timelines
   - Modern twin-widget styles
   - Mobile breakpoint optimization (dropdown converts to visible stacked menu)
+  - Prelegal-specific style scope via `.prelegal-route` and `pl-*` classes for landing/auth/creator experiences
+  - Prelegal iframe embed styles for AI project detail page
+  - Mobile breakpoints for Prelegal at `1200`, `980`, `760`, `560`, `430`, and `390` widths
 
 ### 5.3 Backend API
 
@@ -135,6 +164,10 @@ Information extracted and used:
   - Accepts only `user` and `assistant`
   - Truncates each message to 4000 chars
   - Keeps last 14 messages
+- In-domain Prelegal API proxy configured in `next.config.mjs`:
+  - Source route: `/api/prelegal/:path*`
+  - Destination: `${PRELEGAL_BACKEND_URL}/api/:path*`
+  - Default backend URL when env var missing: `http://127.0.0.1:8000`
 
 ### 5.4 AI Context Grounding
 
@@ -158,6 +191,19 @@ Fallback behavior:
 - Returns `reply` from `createLocalTwinReply(question)`.
 - Sets `model: "local-profile-fallback"` and `fallback: true`.
 - Provides `warning` for UI display.
+
+### 5.6 In-Domain Prelegal Integration
+
+- AI project slug: `prelegal-document-curation`
+- AI project detail page behavior:
+  - Displays project metadata/capabilities from `app/lib/aiProjects.js`
+  - Shows CTA to open in-domain portal (`/ai-projects/prelegal`)
+  - Shows embedded iframe preview (`src=/ai-projects/prelegal`)
+  - Keeps optional external standalone URL support via `PRELEGAL_DEMO_URL`
+- Prelegal creator behavior in SITE:
+  - Session-aware auth flows via `/api/prelegal/auth/*`
+  - Draft management (`create`, `switch`, `rename`, `delete`, `reset`) via `/api/prelegal/drafts/*` and `/api/prelegal/chat/*`
+  - PDF export handled client-side using `jspdf` (`app/lib/prelegal-pdf.js`)
 
 ## 6) Digital Twin UI Behavior
 
@@ -212,6 +258,21 @@ State model:
 - Added hover/focus dropdown listing current AI project entries.
 - Added dedicated page pattern for each project with route-driven content and live demo support.
 
+### 7.6 Prelegal integration updates
+
+- Added `Prelegal AI Document Curation` as a first-class AI project in nav + directory + slug route.
+- Added in-domain Prelegal portal routes under `SITE`:
+  - `/ai-projects/prelegal`
+  - `/ai-projects/prelegal/login`
+  - `/ai-projects/prelegal/signup`
+  - `/ai-projects/prelegal/creator`
+- Added AI project detail page embed block with:
+  - In-domain portal CTA
+  - Standalone app CTA
+  - Embedded iframe preview
+  - Local runbook commands
+- Preserved original Prelegal visual direction while adding phone-first responsive behavior.
+
 ## 8) Build/Test Validation History
 
 Repeated checks performed across iterations:
@@ -222,7 +283,13 @@ Repeated checks performed across iterations:
   - `/`
   - `/_not-found`
   - `/ai-projects`
-  - `/ai-projects/[slug]` with static param `career-ai-chatbot`
+  - `/ai-projects/[slug]` with static params:
+    - `career-ai-chatbot`
+    - `prelegal-document-curation`
+  - `/ai-projects/prelegal`
+  - `/ai-projects/prelegal/login`
+  - `/ai-projects/prelegal/signup`
+  - `/ai-projects/prelegal/creator`
   - `/api/digital-twin`
 
 2. Digital Twin endpoint smoke tests (local)
@@ -245,6 +312,17 @@ Repeated checks performed across iterations:
   - `/ai-projects/career-ai-chatbot` renders dedicated project detail page and live demo anchor.
   - `POST /api/digital-twin` returns valid JSON `reply`.
 
+6. Prelegal in-domain route and embed validation
+- Verified:
+  - `/ai-projects/prelegal` landing content renders with CTA links
+  - `/ai-projects/prelegal-document-curation` shows in-domain portal CTA + iframe block
+  - Auth routes render without prerender errors (via Suspense wrapping around `useSearchParams`)
+
+7. Prelegal API rewrite integration checks
+- Ran Prelegal backend + SITE app together and verified:
+  - `GET /api/prelegal/health` responds `{"status":"ok"}`
+  - `GET /api/prelegal/documents` returns supported document metadata via SITE domain proxy
+
 ## 9) Tooling and Environment Constraints Encountered
 
 Important constraints discovered during implementation:
@@ -254,20 +332,48 @@ Important constraints discovered during implementation:
 - Package installs required elevated network permission.
 - Dev server port binding required elevated execution in this environment.
 - `pdftotext` unavailable; custom PDF extraction scripts were required.
+- Google Fonts fetch can fail in restricted/offline build environments; route-level styling uses robust fallback font stacks for Prelegal pages.
 
 ## 10) Local Development Runbook
 
-From project root:
+### 10.1 SITE only (portfolio + AI project pages)
 
 ```bash
+cd /Users/ayush/Documents/Projects/SITE
 ./scripts/run-dev.sh
 ```
 
-Build check:
+### 10.2 Build check
 
 ```bash
+cd /Users/ayush/Documents/Projects/SITE
 PATH="$(pwd)/.local/node/bin:$PATH" npm run build
 ```
+
+### 10.3 In-domain Prelegal mode (recommended local setup)
+
+Terminal 1 (Prelegal backend):
+
+```bash
+cd /Users/ayush/Documents/Projects/PRELEGAL/backend
+./.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+Terminal 2 (SITE frontend):
+
+```bash
+cd /Users/ayush/Documents/Projects/SITE
+PATH="$(pwd)/.local/node/bin:$PATH" npm run dev
+```
+
+Then open:
+- `http://localhost:3000/ai-projects/prelegal`
+- `http://localhost:3000/ai-projects/prelegal-document-curation`
+
+### 10.4 Optional environment variables for Prelegal integration
+
+- `PRELEGAL_BACKEND_URL` (default: `http://127.0.0.1:8000`)
+- `PRELEGAL_DEMO_URL` (default: `http://127.0.0.1:3400`)
 
 ## 11) Deployment Runbook (EC2 + GoDaddy + HTTPS)
 
@@ -314,6 +420,8 @@ Actions completed in project history:
 
 - `.env` is gitignored and should never be committed.
 - OpenAI keys must remain secret and be rotated if exposed in plaintext anywhere.
+- If running in-domain Prelegal locally, ensure backend secrets remain outside version control in PRELEGAL `.env`.
+- Never expose `PRELEGAL_BACKEND_URL` to untrusted origins if backend is bound beyond localhost.
 - On EC2, lock `.env` permissions:
 
 ```bash
@@ -335,6 +443,10 @@ sudo systemctl restart personal-website
 5. Add persistence for chat history.
 6. Add monitoring (uptime, latency, API error rate, fallback rate).
 7. Add CI workflow for build and lint validation before deploy.
+8. Add end-to-end tests for Prelegal in-domain auth/chat/draft lifecycle paths.
+9. Add health indicator in UI when Prelegal backend proxy is unavailable.
+10. Add deployment strategy for hosting Prelegal backend alongside SITE in production.
+11. Add stronger security hardening for Prelegal auth/session flows before public launch.
 
 ## 15) Fast Recovery Checklist for Future Agents
 
@@ -344,9 +456,22 @@ If a future chat needs to restore project context quickly, do this:
 2. Read `README.md` and `tutorial.md`.
 3. Verify `app/page.js` and `app/api/digital-twin/route.js` are aligned.
 4. Verify AI project routing files (`app/ai-projects/page.js`, `app/ai-projects/[slug]/page.js`, `app/lib/aiProjects.js`).
-5. Run `npm run build`.
-6. Validate `/ai-projects` and `/ai-projects/career-ai-chatbot`.
-7. If deployment issue:
+5. Verify Prelegal in-domain files:
+   - `app/ai-projects/prelegal/*`
+   - `app/components/prelegal/*`
+   - `app/lib/prelegal-api.js`
+   - `app/lib/prelegal-pdf.js`
+   - `next.config.mjs` rewrite for `/api/prelegal/:path*`
+6. Run `npm run build`.
+7. Validate:
+   - `/ai-projects`
+   - `/ai-projects/career-ai-chatbot`
+   - `/ai-projects/prelegal-document-curation`
+   - `/ai-projects/prelegal`
+8. For in-domain Prelegal local checks:
+   - Start Prelegal backend on `127.0.0.1:8000`
+   - Verify `GET /api/prelegal/health` through SITE
+9. If deployment issue:
    - Check `sudo systemctl status personal-website`
    - Check `sudo nginx -t`
    - Check cert status `sudo certbot certificates`
@@ -360,6 +485,15 @@ If a future chat needs to restore project context quickly, do this:
 - Portfolio entries derived from `extra_experience.pdf`.
 - Branded header with photo and stronger name typography.
 - `AI Projects` navigation and dedicated project pages pattern (for scaling future AI builds).
+- Prelegal project slug and route structure:
+  - `/ai-projects/prelegal-document-curation`
+  - `/ai-projects/prelegal`
+  - `/ai-projects/prelegal/login`
+  - `/ai-projects/prelegal/signup`
+  - `/ai-projects/prelegal/creator`
+- API rewrite contract in `next.config.mjs`: `/api/prelegal/:path*` -> `${PRELEGAL_BACKEND_URL}/api/:path*`
+- In-domain Prelegal PDF export support (`jspdf` + `app/lib/prelegal-pdf.js`)
+- AI project detail page embedded Prelegal preview block and in-domain portal CTA behavior
 
 ## 17) Chronological Delivery Log
 
@@ -395,6 +529,25 @@ This section is a practical sequence of what was delivered and why, from first b
 25. Created `/ai-projects` project index page and `/ai-projects/career-ai-chatbot` dedicated project detail route.
 26. Embedded live Career AI Chatbot experience in the dedicated project detail page.
 27. Ran deep route/API validation in production mode for home nav labels, project listing page, project detail page, and chatbot endpoint response.
+28. Added second AI project entry `prelegal-document-curation` to the shared AI project registry and dropdown/navigation.
+29. Made AI project detail rendering project-aware so different slugs can render different live demo modules.
+30. Added Prelegal-specific live demo panel on project detail page with:
+    - in-domain portal CTA
+    - standalone app CTA
+    - embedded iframe preview
+    - local run/stop instructions
+31. Implemented in-domain Prelegal route tree in SITE:
+    - `/ai-projects/prelegal`
+    - `/ai-projects/prelegal/login`
+    - `/ai-projects/prelegal/signup`
+    - `/ai-projects/prelegal/creator`
+32. Ported Prelegal auth and creator application logic into SITE components and libraries.
+33. Added Next.js rewrite proxy in SITE for `/api/prelegal/:path*` to the Prelegal backend.
+34. Verified rewrite integration by running both services and confirming:
+    - `GET /api/prelegal/health` -> `{"status":"ok"}`
+    - `GET /api/prelegal/documents` returns document catalog JSON.
+35. Switched in-domain Prelegal export from text draft to real PDF via `jspdf` and a dedicated PDF renderer utility.
+36. Refined Prelegal mobile responsiveness across multiple breakpoints while preserving original Prelegal design language.
 
 ## 18) Command Reference (Validated Paths)
 
@@ -479,6 +632,37 @@ curl -sS -X POST http://127.0.0.1:3301/api/digital-twin -H "Content-Type: applic
   -d '{"messages":[{"role":"user","content":"What did Ayush lead at noon?"}]}'
 ```
 
+### 18.9 In-domain Prelegal local run (two terminals)
+
+Terminal 1:
+
+```bash
+cd /Users/ayush/Documents/Projects/PRELEGAL/backend
+./.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+Terminal 2:
+
+```bash
+cd /Users/ayush/Documents/Projects/SITE
+PATH="$(pwd)/.local/node/bin:$PATH" npm run dev
+```
+
+Open:
+
+```bash
+http://localhost:3000/ai-projects/prelegal
+http://localhost:3000/ai-projects/prelegal/creator
+http://localhost:3000/ai-projects/prelegal-document-curation
+```
+
+### 18.10 Prelegal rewrite proxy checks (through SITE)
+
+```bash
+curl -sS http://127.0.0.1:3000/api/prelegal/health
+curl -sS http://127.0.0.1:3000/api/prelegal/documents | head -c 400
+```
+
 ## 19) Troubleshooting Playbook
 
 Use this for quick diagnosis in future chats without rediscovering known failure modes.
@@ -545,6 +729,37 @@ Fix:
 2. Restart service.
 3. Re-test `/api/digital-twin`.
 4. Check logs for `warning` field returned by API.
+
+### 19.6 Prelegal pages load but auth/chat API calls fail
+
+Likely cause:
+- Prelegal backend is not running or `PRELEGAL_BACKEND_URL` is incorrect for the current environment.
+
+Fix:
+1. Start backend:
+   ```bash
+   cd /Users/ayush/Documents/Projects/PRELEGAL/backend
+   ./.venv/bin/python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+   ```
+2. Verify proxy path through SITE:
+   ```bash
+   curl -sS http://127.0.0.1:3000/api/prelegal/health
+   ```
+3. If needed, set/update `PRELEGAL_BACKEND_URL` in SITE env and restart SITE server.
+
+### 19.7 Prelegal login/signup page build error about `useSearchParams`
+
+Likely cause:
+- Auth form using `useSearchParams` is not wrapped in Suspense boundary at route page level.
+
+Fix:
+1. Ensure these pages wrap auth form in `<Suspense>`:
+   - `app/ai-projects/prelegal/login/page.jsx`
+   - `app/ai-projects/prelegal/signup/page.jsx`
+2. Re-run build:
+   ```bash
+   PATH="$(pwd)/.local/node/bin:$PATH" npm run build
+   ```
 
 ---
 

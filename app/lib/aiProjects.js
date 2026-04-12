@@ -29,6 +29,36 @@ export const AI_PROJECTS = [
       "Enabled a reusable project-detail pattern for future AI initiatives.",
     ],
   },
+  {
+    slug: "prelegal-document-curation",
+    name: "LexDraft: Prelegal AI Document Curation",
+    status: "Live",
+    route: "/ai-projects/prelegal-document-curation",
+    summary:
+      "LexDraft is a chat-first pre-legal drafting workspace that guides users from intent to downloadable document outputs.",
+    problem:
+      "Founders and operators often need structured legal drafts quickly, but gathering required clauses and fields manually is slow, inconsistent, and error-prone.",
+    solution:
+      "A two-stage AI workflow first identifies the right document type, then collects required inputs through guided chat and compiles a polished draft for export.",
+    capabilities: [
+      "Supports six document types including NDAs, offer letters, DPAs, cloud agreements, and AI addenda.",
+      "Maintains multi-draft sessions with create, switch, rename, reset, and delete controls.",
+      "Tracks completion across required fields and renders final sections when drafts are complete.",
+      "Includes authentication, session-aware workflows, and browser-side PDF export.",
+    ],
+    stack: [
+      "Next.js App Router frontend (TypeScript)",
+      "FastAPI backend (Python)",
+      "SQLModel with SQLite persistence",
+      "OpenAI-powered selection and field-collection turns",
+      "Dockerized local runtime scripts",
+    ],
+    outcomes: [
+      "Reduced drafting friction through a guided conversational flow.",
+      "Created a reusable architecture for additional legal templates.",
+      "Delivered a production-style full-stack AI product that can be demoed locally.",
+    ],
+  },
 ];
 
 export function getAiProjectBySlug(slug) {

@@ -1,3 +1,4 @@
+import AIProjectsPreviewStrip from "./components/ai-projects-preview-strip";
 import DigitalTwinChat from "./components/digital-twin-chat";
 import SiteHeader from "./components/site-header";
 
@@ -165,13 +166,14 @@ export default function HomePage() {
       <div className="ambient ambient-one" />
       <div className="ambient ambient-two" />
       <SiteHeader />
+      <AIProjectsPreviewStrip />
 
       <section className="hero section-reveal">
         <p className="kicker">DATA GOVERNANCE, STRATEGY & AI</p>
         <h1>
-          Enterprise-grade execution
+          Enterprise-Grade Execution
           <br />
-          with a builder&apos;s edge.
+          With a Technical Edge
         </h1>
         <p className="lead">
           I am Ayush Verma, a data and transformation leader based in Abu Dhabi.
