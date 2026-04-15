@@ -1,0 +1,8 @@
+// Skeleton component based on shadcn/ui
+import { cn } from "@/app/lib/ehs-utils"
+
+function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn("animate-pulse rounded-md bg-stone-200", className)} {...props} />
+}
+
+export { Skeleton }

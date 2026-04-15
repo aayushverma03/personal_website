@@ -31,6 +31,38 @@ export const AI_PROJECTS = [
     ],
   },
   {
+    slug: "verity-ehs-platform",
+    name: "Verity : EHS AI Compliance Tool",
+    status: "Live",
+    route: "/ai-projects/verity-ehs-platform",
+    repoUrl: "https://github.com/aayushverma03/verityEHS",
+    summary:
+      "Verity EHS is an AI-powered compliance platform that turns dense chemical-sector regulations into searchable answers, risk-aware work permits, and photo-verified proof submissions.",
+    problem:
+      "EHS teams in the chemical industry juggle thousands of pages of regulations, SOPs, and safety data sheets. Finding the right rule, pre-filling risk assessments, and proving compliance at the site level is slow, manual, and error-prone.",
+    solution:
+      "A RAG-backed workspace lets workers search regulations in natural language, auto-generates risk-assessed work permits, issues dynamic checklists, and produces photo-verified PDF proof reports with compliance gap detection.",
+    capabilities: [
+      "Regulatory Q&A grounded in 1,214 chunks from 34 ingested PDFs via pgvector + GPT retrieval.",
+      "Work permit workflow with AI risk pre-fill, risk scoring, and supervisor approval chain.",
+      "Dynamic AI-generated inspection checklists tailored to each permit's operation and hazards.",
+      "Photo-evidenced submission flow that emits a signed PDF report and flags compliance gaps.",
+      "Bilingual Korean/English UI with persistent locale preference.",
+    ],
+    stack: [
+      "Next.js 14 App Router (TypeScript, Tailwind, shadcn/ui)",
+      "FastAPI backend (Python 3.12) with SQLAlchemy async + asyncpg",
+      "PostgreSQL 15 + pgvector for RAG retrieval",
+      "OpenAI gpt-5.4-mini + text-embedding-3-small",
+      "Dockerized multi-service deploy (Postgres + backend + Next.js)",
+    ],
+    outcomes: [
+      "Collapsed multi-hour regulation lookups into seconds of guided Q&A.",
+      "Standardized the chemical-sector permit flow around a single AI-risk-aware workflow.",
+      "Delivered end-to-end proof-of-compliance artifacts without manual PDF assembly.",
+    ],
+  },
+  {
     slug: "prelegal-document-curation",
     name: "LexDraft: Prelegal AI Document Curation",
     status: "Live",

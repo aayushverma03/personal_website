@@ -10,7 +10,7 @@ You now have a **Next.js 16 personal website** with:
 - Sections for About, Journey, Expertise, Credentials, and Portfolio
 - Your profile photo in the top branding area
 - A modern Digital Twin chat widget
-- A server-side API that talks to OpenAI (`gpt-5.3-codex`)
+- A server-side API that talks to OpenAI (`gpt-5.4-mini`)
 - A local fallback response mode if OpenAI is unavailable (for example quota/model/key issues)
 
 ---
@@ -94,7 +94,7 @@ When a user asks something in the Digital Twin widget:
    - Validates/normalizes messages
    - Loads API key from environment
    - Builds a system prompt + profile context
-   - Calls OpenAI model `gpt-5.3-codex`
+   - Calls OpenAI model `gpt-5.4-mini`
 4. API returns a reply JSON
 5. Frontend appends response to transcript
 
@@ -206,7 +206,7 @@ This is the backend endpoint. Important points:
 
 - Runs server-side (`runtime = "nodejs"`)
 - Reads `OPENAI_API_KEY` securely from environment
-- Calls model: `gpt-5.3-codex`
+- Calls model: `gpt-5.4-mini`
 - Uses system prompt + profile context grounding
 - Falls back to local profile responses on provider issues
 
@@ -317,7 +317,7 @@ Sample (modern twin widget container):
 ```json
 {
   "reply": "At noon...",
-  "model": "gpt-5.3-codex"
+  "model": "gpt-5.4-mini"
 }
 ```
 

@@ -52,7 +52,7 @@ check_contains "security notes" "## 13) Security Notes"
 check_contains "recovery checklist" "## 15) Fast Recovery Checklist for Future Agents"
 check_contains "hard constraints" "## 16) What Must Never Be Lost in Future Edits"
 
-check_contains "model pin" "gpt-5.3-codex"
+check_contains "model pin" "gpt-5.4-mini"
 check_contains "digital twin endpoint" "POST /api/digital-twin"
 check_contains "portfolio source" "extra_experience.pdf"
 check_contains "profile source" "Profile.pdf"

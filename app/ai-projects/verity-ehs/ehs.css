@@ -1,0 +1,316 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Scoped Tailwind preflight for Verity EHS.
+ * Preflight is disabled globally (to protect the portfolio CSS).
+ * All selectors are wrapped in `:where(...)` so every rule below has
+ * specificity 0 -- Tailwind utility classes (specificity 1) always win.
+ */
+:where(.ehs-route),
+:where(.ehs-route *),
+:where(.ehs-route *::before),
+:where(.ehs-route *::after) {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e7e5e4;
+}
+
+.ehs-route {
+  --bg-primary: #FAFAF9;
+  --bg-white: #FFFFFF;
+  --text-primary: #292524;
+  --text-secondary: #78716C;
+  --text-muted: #A8A29E;
+  --accent: #0F766E;
+  --accent-hover: #115E59;
+  --accent-light: #CCFBF1;
+  --border: #E7E5E4;
+  --border-light: #F5F5F4;
+
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-feature-settings: normal;
+  font-variation-settings: normal;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+}
+
+:where(.ehs-route hr) {
+  height: 0;
+  color: inherit;
+  border-top-width: 1px;
+}
+
+:where(.ehs-route abbr:where([title])) {
+  text-decoration: underline dotted;
+}
+
+:where(.ehs-route h1),
+:where(.ehs-route h2),
+:where(.ehs-route h3),
+:where(.ehs-route h4),
+:where(.ehs-route h5),
+:where(.ehs-route h6) {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+}
+
+:where(.ehs-route a) {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+:where(.ehs-route b),
+:where(.ehs-route strong) {
+  font-weight: bolder;
+}
+
+:where(.ehs-route code),
+:where(.ehs-route kbd),
+:where(.ehs-route samp),
+:where(.ehs-route pre) {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 1em;
+}
+
+:where(.ehs-route small) {
+  font-size: 80%;
+}
+
+:where(.ehs-route sub),
+:where(.ehs-route sup) {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+:where(.ehs-route sub) {
+  bottom: -0.25em;
+}
+
+:where(.ehs-route sup) {
+  top: -0.5em;
+}
+
+:where(.ehs-route table) {
+  text-indent: 0;
+  border-color: inherit;
+  border-collapse: collapse;
+}
+
+:where(.ehs-route button),
+:where(.ehs-route input),
+:where(.ehs-route optgroup),
+:where(.ehs-route select),
+:where(.ehs-route textarea) {
+  font-family: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+:where(.ehs-route button),
+:where(.ehs-route select) {
+  text-transform: none;
+}
+
+:where(.ehs-route button),
+:where(.ehs-route input:where([type="button"])),
+:where(.ehs-route input:where([type="reset"])),
+:where(.ehs-route input:where([type="submit"])) {
+  -webkit-appearance: button;
+  background-color: transparent;
+  background-image: none;
+}
+
+:where(.ehs-route button),
+:where(.ehs-route [role="button"]) {
+  cursor: pointer;
+}
+
+:where(.ehs-route :-moz-focusring) {
+  outline: auto;
+}
+
+:where(.ehs-route :-moz-ui-invalid) {
+  box-shadow: none;
+}
+
+:where(.ehs-route progress) {
+  vertical-align: baseline;
+}
+
+:where(.ehs-route ::-webkit-inner-spin-button),
+:where(.ehs-route ::-webkit-outer-spin-button) {
+  height: auto;
+}
+
+:where(.ehs-route [type="search"]) {
+  -webkit-appearance: textfield;
+  outline-offset: -2px;
+}
+
+:where(.ehs-route ::-webkit-search-decoration) {
+  -webkit-appearance: none;
+}
+
+:where(.ehs-route ::-webkit-file-upload-button) {
+  -webkit-appearance: button;
+  font: inherit;
+}
+
+:where(.ehs-route summary) {
+  display: list-item;
+}
+
+:where(.ehs-route blockquote),
+:where(.ehs-route dl),
+:where(.ehs-route dd),
+:where(.ehs-route hr),
+:where(.ehs-route figure),
+:where(.ehs-route p),
+:where(.ehs-route pre) {
+  margin: 0;
+}
+
+:where(.ehs-route fieldset) {
+  margin: 0;
+  padding: 0;
+}
+
+:where(.ehs-route legend) {
+  padding: 0;
+}
+
+:where(.ehs-route ol),
+:where(.ehs-route ul),
+:where(.ehs-route menu) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+:where(.ehs-route dialog) {
+  padding: 0;
+}
+
+:where(.ehs-route textarea) {
+  resize: vertical;
+}
+
+:where(.ehs-route input::placeholder),
+:where(.ehs-route textarea::placeholder) {
+  opacity: 1;
+  color: #a8a29e;
+}
+
+:where(.ehs-route :disabled) {
+  cursor: default;
+}
+
+:where(.ehs-route img),
+:where(.ehs-route svg),
+:where(.ehs-route video),
+:where(.ehs-route canvas),
+:where(.ehs-route audio),
+:where(.ehs-route iframe),
+:where(.ehs-route embed),
+:where(.ehs-route object) {
+  display: block;
+  vertical-align: middle;
+}
+
+:where(.ehs-route img),
+:where(.ehs-route video) {
+  max-width: 100%;
+  height: auto;
+}
+
+:where(.ehs-route [hidden]) {
+  display: none;
+}
+
+@layer components {
+  .ehs-route .card {
+    @apply bg-white border border-stone-200 shadow-sm;
+  }
+
+  .ehs-route .card-hover {
+    @apply bg-white border border-stone-200 shadow-sm transition-all duration-200 hover:shadow-md hover:border-stone-300;
+  }
+
+  .ehs-route .accent-text {
+    color: #0F766E;
+  }
+
+  .ehs-route .ehs-btn-primary {
+    @apply bg-teal-700 text-white transition-colors duration-200 hover:bg-teal-800;
+    background-image: none;
+    box-shadow: none;
+  }
+
+  .ehs-route .ehs-btn-primary:hover,
+  .ehs-route .ehs-btn-primary:focus {
+    box-shadow: none;
+    transform: none;
+  }
+
+  .ehs-route .ehs-btn-secondary {
+    @apply bg-white border border-stone-300 text-stone-700 hover:bg-stone-50 hover:border-stone-400 transition-colors duration-200;
+    background-image: none;
+    box-shadow: none;
+  }
+
+  .ehs-route .ehs-btn-secondary:hover,
+  .ehs-route .ehs-btn-secondary:focus {
+    box-shadow: none;
+    transform: none;
+  }
+
+  .ehs-route .filter-chip {
+    @apply px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 min-h-[40px];
+  }
+
+  .ehs-route .filter-chip-active {
+    @apply px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 min-h-[40px] bg-teal-700 text-white;
+  }
+
+  .ehs-route .filter-chip-inactive {
+    @apply px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 min-h-[40px] bg-white text-stone-600 hover:bg-stone-100 hover:text-stone-800 border border-stone-300;
+  }
+
+  .ehs-route .page-container {
+    @apply min-h-screen pt-20 pb-24 md:pt-24 md:pb-8 px-4;
+  }
+
+  .ehs-route .section-title {
+    @apply text-2xl md:text-4xl font-bold tracking-tight text-stone-800;
+  }
+
+  .ehs-route .animate-fade-in {
+    animation: ehsFadeIn 0.4s ease-out;
+  }
+}
+
+@keyframes ehsFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}

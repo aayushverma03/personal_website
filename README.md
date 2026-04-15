@@ -12,7 +12,7 @@ Set your API key in `.env`:
 OPENAI_API_KEY=your_key_here
 ```
 
-The Digital Twin backend uses model `gpt-5.3-codex`.
+The Digital Twin backend uses model `gpt-5.4-mini`.
 
 ## Run locally
 

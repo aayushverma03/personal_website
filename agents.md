@@ -18,7 +18,7 @@ Primary goals completed during this project:
 1. Build a high-end personal website with "enterprise meets edgy" visual direction.
 2. Populate content using profile data from `Profile.pdf`.
 3. Add future portfolio section, then upgrade it to real project/certification content using `extra_experience.pdf`.
-4. Add AI chat section (Digital Twin) using OpenAI model `gpt-5.3-codex`.
+4. Add AI chat section (Digital Twin) using OpenAI model `gpt-5.4-mini`.
 5. Improve Digital Twin UI to a modern chat widget style.
 6. Add profile photo and stronger personal branding in header.
 7. Add additional `noon` experience details requested by user.
@@ -177,7 +177,7 @@ Information extracted and used:
 - Endpoint: `POST /api/digital-twin`
 - File: `app/api/digital-twin/route.js`
 - OpenAI SDK call:
-  - Model: `gpt-5.3-codex`
+  - Model: `gpt-5.4-mini`
   - Input includes system prompt + recent message history.
 - Message normalization:
   - Accepts only `user` and `assistant`
@@ -498,7 +498,7 @@ If a future chat needs to restore project context quickly, do this:
 
 ## 16) What Must Never Be Lost in Future Edits
 
-- Model requirement: `gpt-5.3-codex` (unless user requests change).
+- Model requirement: `gpt-5.4-mini` (unless user requests change).
 - Digital Twin grounding behavior and anti-hallucination prompt constraints.
 - Noon-specific additions requested by user.
 - Portfolio entries derived from `extra_experience.pdf`.
@@ -525,7 +525,7 @@ This section is a practical sequence of what was delivered and why, from first b
 5. Extracted profile context from `Profile.pdf` using custom PDF stream decoding when `pdftotext` was unavailable.
 6. Replaced generic biography text with profile-grounded content from the decoded resume data.
 7. Added Digital Twin v1 (custom in-page chat component) and created API route `app/api/digital-twin/route.js`.
-8. Integrated OpenAI path using model `gpt-5.3-codex` and `.env` key loading.
+8. Integrated OpenAI path using model `gpt-5.4-mini` and `.env` key loading.
 9. Added error handling + local fallback so chat continues even if provider returns quota/model/key issues.
 10. Extracted `extra_experience.pdf` content (ReportLab stream decoding) and updated portfolio entries + certification details.
 11. Removed placeholder/future wording from portfolio section title and cards.

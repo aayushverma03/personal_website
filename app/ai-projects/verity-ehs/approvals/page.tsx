@@ -1,0 +1,137 @@
+// Approvals list page - current user's requests
+"use client"
+
+import { useEffect, useState } from "react"
+import Link from "next/link"
+import { Plus } from "lucide-react"
+import { Nav } from "@/app/components/ehs/nav"
+import { Card, CardContent } from "@/app/components/ehs/ui/card"
+import { Badge } from "@/app/components/ehs/ui/badge"
+import { Button } from "@/app/components/ehs/ui/button"
+import { Skeleton } from "@/app/components/ehs/ui/skeleton"
+import { getApprovals } from "@/app/lib/ehs-api"
+import { useLanguage } from "@/app/components/ehs/language-provider"
+
+type Approval = {
+  id: string
+  operation_type: string
+  site_name: string
+  status: string
+  risk_score: string
+  risk_colour: string
+  created_at: string
+}
+
+function StatusBadge({ status, t }: { status: string; t: { approvals: { approved: string; pending: string; rejected: string; expired: string } } }) {
+  switch (status) {
+    case "approved":
+      return <Badge variant="success">{t.approvals.approved}</Badge>
+    case "pending":
+      return <Badge variant="warning">{t.approvals.pending}</Badge>
+    case "rejected":
+      return <Badge variant="danger">{t.approvals.rejected}</Badge>
+    case "expired":
+      return <Badge variant="secondary">{t.approvals.expired}</Badge>
+    default:
+      return <Badge variant="secondary">{status}</Badge>
+  }
+}
+
+function getRiskBadge(score: string, colour: string) {
+  if (!score) return null
+  const colorClass =
+    colour === "green"
+      ? "bg-green-100 text-green-800"
+      : colour === "amber"
+      ? "bg-amber-100 text-amber-800"
+      : "bg-red-100 text-red-800"
+  return <span className={`inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium ${colorClass}`}>{score}</span>
+}
+
+export default function ApprovalsPage() {
+  const { t } = useLanguage()
+  const [approvals, setApprovals] = useState<Approval[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState("")
+
+  useEffect(() => {
+    async function load() {
+      try {
+        const data = await getApprovals()
+        setApprovals(data)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to load approvals")
+      } finally {
+        setLoading(false)
+      }
+    }
+    load()
+  }, [])
+
+  return (
+    <>
+      <Nav />
+      <main className="min-h-screen pt-20 pb-24 md:pt-24 md:pb-8 px-4">
+        <div className="max-w-3xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <h1 className="text-xl md:text-3xl font-bold text-stone-800">{t.approvals.title}</h1>
+            <div className="flex gap-2">
+              <Button asChild variant="outline" className="min-h-[44px]">
+                <Link href="/ai-projects/verity-ehs/approvals/review">{t.approvals.reviewQueue}</Link>
+              </Button>
+              <Button asChild className="min-h-[44px] ehs-btn-primary">
+                <Link href="/ai-projects/verity-ehs/approvals/new">
+                  <Plus className="h-4 w-4 mr-1" />
+                  {t.approvals.newPermit}
+                </Link>
+              </Button>
+            </div>
+          </div>
+
+          {error && <p className="text-red-600 mb-4">{error}</p>}
+
+          <div className="space-y-3">
+            {loading
+              ? Array.from({ length: 3 }).map((_, i) => (
+                  <Card key={i} className="bg-white border border-stone-200">
+                    <CardContent className="p-4">
+                      <Skeleton className="h-5 w-1/3 mb-2" />
+                      <Skeleton className="h-4 w-1/2" />
+                    </CardContent>
+                  </Card>
+                ))
+              : approvals.map((approval) => (
+                  <Link key={approval.id} href={`/ai-projects/verity-ehs/approvals/${approval.id}`}>
+                    <Card className="bg-white border border-stone-200 hover:border-stone-300 hover:shadow-sm transition-all cursor-pointer">
+                      <CardContent className="p-4">
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                          <div>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <span className="font-medium text-stone-800">{approval.operation_type}</span>
+                              <StatusBadge status={approval.status} t={t} />
+                              {getRiskBadge(approval.risk_score, approval.risk_colour)}
+                            </div>
+                            <p className="text-sm text-stone-500 mt-1">
+                              {approval.site_name} | {new Date(approval.created_at).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
+                ))}
+          </div>
+
+          {!loading && approvals.length === 0 && (
+            <div className="text-center py-8">
+              <p className="text-stone-500 mb-4">{t.approvals.noPermits}</p>
+              <Button asChild className="min-h-[44px] ehs-btn-primary">
+                <Link href="/ai-projects/verity-ehs/approvals/new">{t.approvals.createFirst}</Link>
+              </Button>
+            </div>
+          )}
+        </div>
+      </main>
+    </>
+  )
+}

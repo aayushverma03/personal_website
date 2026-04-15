@@ -7,6 +7,8 @@ import { AI_PROJECTS, getAiProjectBySlug } from "../../lib/aiProjects";
 
 const PRELEGAL_PROJECT_SLUG = "prelegal-document-curation";
 const PRELEGAL_PORTAL_ROUTE = "/ai-projects/prelegal";
+const VERITY_EHS_PROJECT_SLUG = "verity-ehs-platform";
+const VERITY_EHS_PORTAL_ROUTE = "/ai-projects/verity-ehs";
 
 export async function generateStaticParams() {
   return AI_PROJECTS.map((project) => ({ slug: project.slug }));
@@ -38,6 +40,7 @@ export default async function AIProjectDetailPage({ params }) {
 
   const isCareerAiChatbot = project.slug === "career-ai-chatbot";
   const isPrelegalProject = project.slug === PRELEGAL_PROJECT_SLUG;
+  const isVerityEhsProject = project.slug === VERITY_EHS_PROJECT_SLUG;
 
   return (
     <main className="site-shell">
@@ -56,6 +59,10 @@ export default async function AIProjectDetailPage({ params }) {
           {isPrelegalProject ? (
             <Link href={PRELEGAL_PORTAL_ROUTE} className="btn btn-primary">
               Open LexDraft Portal
+            </Link>
+          ) : isVerityEhsProject ? (
+            <Link href={VERITY_EHS_PORTAL_ROUTE} className="btn btn-primary">
+              Open Verity EHS
             </Link>
           ) : (
             <a href="#live-demo" className="btn btn-primary">
@@ -201,7 +208,49 @@ export default async function AIProjectDetailPage({ params }) {
           </article>
         ) : null}
 
-        {!isCareerAiChatbot && !isPrelegalProject ? (
+        {isVerityEhsProject ? (
+          <article className="external-demo-panel lexdraft-demo-panel">
+            <p className="portfolio-note">
+              Verity EHS is live as an in-domain workspace. Open the portal to
+              search regulations, raise work permits, and generate
+              compliance-verified proof reports.
+            </p>
+            <div className="external-demo-actions">
+              <Link href={VERITY_EHS_PORTAL_ROUTE} className="btn btn-primary">
+                Open Verity EHS
+              </Link>
+            </div>
+
+            <div className="lexdraft-preview-grid" aria-label="Verity EHS flow preview">
+              <article className="lexdraft-preview-card">
+                <p className="lexdraft-preview-step">Step 1</p>
+                <h3>Search Regulations</h3>
+                <p>
+                  Ask in natural language across 34 ingested PDFs; answers cite
+                  the exact regulation and excerpt.
+                </p>
+              </article>
+              <article className="lexdraft-preview-card">
+                <p className="lexdraft-preview-step">Step 2</p>
+                <h3>Raise a Work Permit</h3>
+                <p>
+                  AI pre-fills hazards, PPE, and risk score; a supervisor
+                  reviews and approves before site work begins.
+                </p>
+              </article>
+              <article className="lexdraft-preview-card">
+                <p className="lexdraft-preview-step">Step 3</p>
+                <h3>Submit Proof of Compliance</h3>
+                <p>
+                  Complete a dynamic checklist with photo evidence; get a
+                  signed PDF report with compliance gaps flagged.
+                </p>
+              </article>
+            </div>
+          </article>
+        ) : null}
+
+        {!isCareerAiChatbot && !isPrelegalProject && !isVerityEhsProject ? (
           <p className="portfolio-note">
             Live demo module for this project will be attached in the next
             release.

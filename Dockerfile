@@ -16,6 +16,15 @@ COPY backend/pyproject.toml backend/uv.lock* ./
 RUN uv sync --no-dev --no-install-project
 COPY backend/ ./
 
+## Stage 2b: resolve Verity EHS backend deps with uv
+FROM python:3.12-slim AS ehs-backend-build
+COPY --from=ghcr.io/astral-sh/uv:0.11.6 /uv /usr/local/bin/uv
+WORKDIR /app/backend-ehs
+ENV UV_LINK_MODE=copy UV_COMPILE_BYTECODE=1
+COPY backend-ehs/pyproject.toml backend-ehs/uv.lock* ./
+RUN uv sync --no-dev --no-install-project
+COPY backend-ehs/ ./
+
 ## Stage 3: runtime
 FROM python:3.12-slim AS runtime
 ENV NODE_MAJOR=22 \
@@ -23,8 +32,9 @@ ENV NODE_MAJOR=22 \
     PYTHONUNBUFFERED=1 \
     NEXT_TELEMETRY_DISABLED=1 \
     PRELEGAL_BACKEND_URL=http://127.0.0.1:8000 \
+    EHS_BACKEND_URL=http://127.0.0.1:8001 \
     DATABASE_URL=sqlite:////app/backend/data/dev.db \
-    PATH=/app/backend/.venv/bin:/usr/local/bin:/usr/bin:/bin
+    PATH=/usr/local/bin:/usr/bin:/bin
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates curl gnupg \
@@ -41,6 +51,7 @@ RUN apt-get update \
 WORKDIR /app
 
 COPY --from=backend-build /app/backend /app/backend
+COPY --from=ehs-backend-build /app/backend-ehs /app/backend-ehs
 RUN mkdir -p /app/backend/data
 
 COPY --from=frontend-build /app/site/.next/standalone /app/site

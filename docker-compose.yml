@@ -1,0 +1,34 @@
+services:
+  db:
+    image: pgvector/pgvector:pg15
+    container_name: ayush-site-db
+    environment:
+      POSTGRES_USER: ehs_user
+      POSTGRES_PASSWORD: ${EHS_DB_PASSWORD:-ehspass}
+      POSTGRES_DB: ehs_platform
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./backend-ehs/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ehs_user -d ehs_platform"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: ayush-site
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${PORT:-3000}:3000"
+    env_file: .env
+    environment:
+      EHS_DATABASE_URL: postgresql+asyncpg://ehs_user:${EHS_DB_PASSWORD:-ehspass}@db:5432/ehs_platform
+      EHS_JWT_SECRET: ${EHS_JWT_SECRET:-dev-secret-change-in-production}
+    volumes:
+      - ./backend/data:/app/backend/data
+
+volumes:
+  pgdata:

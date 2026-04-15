@@ -5,7 +5,7 @@ import { DIGITAL_TWIN_CONTEXT } from "../../lib/digitalTwinContext";
 
 export const runtime = "nodejs";
 
-const MODEL = "gpt-5.3-codex";
+const MODEL = "gpt-5.4-mini";
 const MAX_HISTORY_MESSAGES = 14;
 
 const SYSTEM_PROMPT = `

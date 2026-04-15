@@ -1,8 +1,6 @@
 #!/bin/sh
 set -e
 
-IMAGE=ayush-site:dev
-CONTAINER=ayush-site
 PORT=${PORT:-3000}
 DOCKER_WAIT_SECONDS=${DOCKER_WAIT_SECONDS:-60}
 DOCKER_BIN=""
@@ -45,17 +43,11 @@ if ! docker_server_ready; then
     fi
 fi
 
-"$DOCKER_BIN" build -t "$IMAGE" .
-"$DOCKER_BIN" rm -f "$CONTAINER" 2>/dev/null || true
-
-ENV_ARGS=""
-if [ -f .env ]; then
-    ENV_ARGS="--env-file .env"
+if [ ! -f .env ]; then
+    echo ".env missing. Copy .env.example to .env and fill in values."
+    exit 1
 fi
 
-"$DOCKER_BIN" run -d --name "$CONTAINER" -p "${PORT}:3000" \
-    $ENV_ARGS \
-    -v "$(pwd)/backend/data:/app/backend/data" \
-    "$IMAGE"
+PORT="$PORT" "$DOCKER_BIN" compose up -d --build
 
-echo "SITE + LexDraft backend running at http://localhost:${PORT}"
+echo "SITE + LexDraft + Verity EHS running at http://localhost:${PORT}"

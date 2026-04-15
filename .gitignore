@@ -9,3 +9,7 @@ backend/**/__pycache__/
 backend/**/*.pyc
 backend/.pytest_cache/
 backend/data/*.db
+backend-ehs/.venv/
+backend-ehs/**/__pycache__/
+backend-ehs/**/*.pyc
+backend-ehs/.pytest_cache/
