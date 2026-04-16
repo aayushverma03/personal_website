@@ -41,7 +41,7 @@ export default function DocumentDetailPage() {
     const filename = doc.filename
     setDownloading(true)
     try {
-      const res = await fetch(`/api/documents/${id}/download`, { headers: authHeaders() })
+      const res = await fetch(`/api/ehs/documents/${id}/download`, { headers: authHeaders() })
       if (!res.ok) throw new Error("Download failed")
       const arrayBuffer = await res.arrayBuffer()
       const blob = new Blob([arrayBuffer], { type: "application/pdf" })

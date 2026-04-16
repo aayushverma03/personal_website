@@ -145,6 +145,7 @@ export default function IncidentPage() {
                 </div>
 
                 <p className="text-xs text-stone-400 italic">{t.incident.disclaimer}</p>
+                <p className="text-xs text-stone-400">* Results shown are placeholder values for demonstration purposes.</p>
 
                 {reportSent ? (
                   <div className="flex items-center gap-3 p-4 bg-emerald-50 border border-emerald-200 rounded-lg">
